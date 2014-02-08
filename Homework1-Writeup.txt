@@ -1,0 +1,50 @@
+My Notes on this Homework:
+---------------------------
+Notes about me, I'm a professional Java/Javascript developer.  I've never used makefiles nor have I even coded anything remotely big in C nor C++.  I focused on CS Theory in my undergrad, so when it comes to Math and graphs and such, I feel pretty confident.  Needless to say LLVM and its documentation on building shocked me pretty hard.
+
+I had a hell of a time setting up my environment.  I started out on my MacBook Air running OSX 10.9, where I completely misunderstood how to use a Makefile for a good amount of time, about 3 days.  I had clang and clang++ working great, but for some reason I got that confused with llvm-gcc and llvm-gcc++.  So I eventually abandoned that idea and tried to setup on an Ubuntu VM on my mac, only for that to run out of memory once, and take 2+ hours to compile llvm wrong.  So I abandoned that idea and used my work computer to do this assignment.
+
+My work computer is running Red Hat 6, which has an out of date GCC and G++ compiler, since I can only install certain programs on my computer per our lab's rules.  However, I disabled the compiler checks for llvm, and was able to build it successfully, and after staring even longer at how to hell to use opt (a good 4-6 hours of pure confusion) I eventually realized that hello.bc was supposed to be created from the hello.c example, not Hello.cpp as I thought for a good long time (I figured it out before giving into the forum my stupidity).  Once I finally made that jump, I moved directly into Part 2 of the homework.
+
+The amount of C++ and C coding I did as an undergrad might as well be none.  I was initially Computational Media until I realized that I didn't like the design classes (too arty for me), so I switched and took threads that wouldn't delay my graduation date.  Instead, I focused heavily in Java projects and Theory classes, doing smidgens of C++ for graphics and animation.  So the shell shock of the documentation for LLVM Passes was huge, a good 10 hours of my time staring and poking at the Hello World example before I finally felt somewhat comfortable doing parts of part 2 of the homework.
+
+I'm aware this explanation is long, but considering how little of the Homework I accomplished, I feel that I should be explaining how time consuming it's been trying to learn everything.  I get mystery errors that Google doesn't have good answers for, and at this point in time, I feel that I could complete this HW assignment given another 48 hours (for sleep and food, all other times dedicated to learning the material).  I'm really sad about how little I did get done for this homework, and I'm still planning to look into figuring out solutions to the homework when I'm not at work.  This isn't an excuse, but an explanation.  I did start a week ahead of time in 2-4 hour chunks trying to set up my environment and reading piazza, my biggest obstacle is lack of understanding C/C++.
+
+With all of that out of the way, here's my Part 1 (the easy part)
+
+Part 1
+------------------
+My computer is running Red Hat 6, has 16gb RAM and 4 core 2.3 GHz processor.  Note that I compiled/compressed everything while working at my job, so my times may be sporadic.
+
+With GCC/G++, I compiled using the command 'time -p make' and it gave me the following times:real 28.13, user 25.44, sys 2.58.
+
+With Clang/Clang++, it was much slower using the same command: real 322.02,  user 318.13, sys 3.28.
+
+For the second part, I used only Clang/Clang++ for compiling p7zip, so using the -O1 flag, it took real 164.59, user 246.34, sys 2.04 to compress linux-3.13, and it compressed down to 80Mb.  Using the -O3 flag, it took longer to compress, real 224.29, user 249.30, sys 2.46, and it compressed down to the same size.  
+
+I know that -O3 compiles the files so that they're optimized the most, but I guess that means more code to look through while compiling, even though all functions are inlined.  I didn't time the compilation of p7zip as the instructions didn't tell me to.
+
+Part 2
+---------------------
+Honestly, I have no idea what you mean by Max/Min/Average across all Functions, so I instead looked at each function in the file, and anaylized that with the number you wanted.  Sorry if it's not what you were expecting, but I've pretty much given up on this assignment by now.
+
+I've created different .cpp files for each pass I've gotten complete, which is Basic Blocks, CFG Edges, and SingleEntryLoopDetector.  LoopDetector.cpp does do the code that gets all loops, but since that's include in part 3.1, I figure why go through the trouble of doing it again.  
+
+I could not get DominatorTree to work, nor do I have the patience (I've been on this computer doing this assignment for 12 hours now straight) to do a work around.  If I had the patience to actually code it up, my strategy would be to look at each node and set a default dominance of itself, then have it's parent be dominant, and so forth as discussed in the dominance algorithm in class.
+
+Part 3.1
+----------------------
+I did this in LoopDetector.cpp.  The strategy here is to look at each loop depth, and detect if it's an outer loop only if the change is from 0 to 1, and to do a back edge detection any time the level depth decreases.  
+
+Part 3.2
+----------------------
+Honestly, I don't have a test file (unless BFS.cpp was it, I used it for part 2, and I thought it was meant for part 3.3), so I didn't get around to this.  However, if it's worth anything, Mr. Compiler's algorithm would double-count certain types of loops.  Imagine the following directed graph: vertices=[A,B,C], edges=[AB,BA,CB,BC]. Mr Compiler's algorithm would detect 3 loops here, AB, AC, BC, though is that really the case?  I'd assume there's only 2 loops, AB and BC, and counting backedges would account for that.  Unfortunately, I'm not entirely sure how to code that up.
+
+Part 3.3
+----------------------
+Yeah...didn't get to it in time, I just legitimately ran out of time.
+
+Conclusion
+----------------------
+I hope that while my homework submission is extremely disappointing, it was at least somewhat fun to read.  If I could go to TA office hours, I would, but it conflicts with work so I'll live by Piazza.  If you do plan on extending the homework or allowing us to finish with a penalty, let me know at james.kingIII@gtri.gatech.edu.  I did put 100% into this homework, it just wasn't enough to finish on time.
+
