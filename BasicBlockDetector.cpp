@@ -9,17 +9,20 @@
 using namespace llvm;
 
 namespace {
-  struct BasicBlockDetector : public LoopInfo  {
+  struct BasicBlockDetector : public ModulePass  {
     static char ID;
-    BasicBlockDetector() : LoopInfo() {}
+    BasicBlockDetector() : ModulePass(ID) {}
 
-    virtual bool runOnFunction(Function &F) {
-      getLoopInfo(F); 
+    virtual bool runOnModule(Module &M) {
+      Module::iterator F = M.begin(), E = M.end();
+      for (; F != E; F++) {
+        getLoopInfo(F);
+      } 
       return false;
     }
 
-    void getLoopInfo(const Function& F) const {
-      errs() << F.getName() << " # of BasicBlocks: " << F.size() << '\n';
+    void getLoopInfo(Function *F) const {
+      errs() << F->getName() << " # of BasicBlocks: " << F->size() << '\n';
     };
     
   };

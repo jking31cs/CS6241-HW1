@@ -1,5 +1,5 @@
 #include "llvm/Pass.h"
-#include "llvm/Analysis/Dominators.h"
+#include "llvm/Analysis/PostDominators.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
@@ -8,9 +8,9 @@ using namespace llvm;
 
 namespace {
 
-  struct DominatorDetector : public FunctionPass  {
+  struct DominatorDetector : public PostDominatorTree  {
     static char ID;
-    DominatorDetector() : FunctionPass(ID) {}
+    DominatorDetector() : PostDominatorTree() {}
 
     virtual bool runOnFunction(Function &F) {
       functionName(&F);
@@ -20,10 +20,11 @@ namespace {
 
     virtual void getAnalysisUsage(AnalysisUsage &AU) const {
       AU.setPreservesAll();
+      AU.addRequired<PostDominatorTree>();
     }
 
     void getInfo(const Function& F) const {
-      DominatorTree *DT = &getAnalysis<DominatorTree>();
+      PostDominatorTree *DT = &getAnalysis<PostDominatorTree>();
       Function::const_iterator BB1 = F.begin(), E1 = F.end();
       Function::const_iterator BB2 = F.begin(), E2 = F.end();
       for(; BB1 != E1; ++BB1) {
