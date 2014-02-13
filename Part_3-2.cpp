@@ -67,13 +67,11 @@ namespace {
       std::list<Edge> edgeList = getLoopInfo(&F);
       std::list<Path*> paths;
       //Initialize the distance between any 2 points to be at max, 0 for distance to itself.
-      errs() << "checkpoint";
+      errs() << "checkpoint0";
       for (Function::iterator it1 = F.begin(), e1 = F.end(); it1 != e1; it1++) {
-        errs() << "hi";
         for (Function::iterator it2 = F.begin(), e2 = F.end(); it2 != e2; it2++) {
           Path path(it1, it2);
           path.dist = std::numeric_limits<int>::max();
-          errs() << "hello";
           paths.push_front(&path);
         }
       } 
@@ -87,7 +85,7 @@ namespace {
          }
          paths.push_back(&path);
       }
-      errs() << "checkpoint"; 
+      errs() << "checkpoint1"; 
       //Set up edges in the paths
       for (std::list<Edge>::iterator edge_it = edgeList.begin(), e = edgeList.end(); edge_it != e; ++edge_it) {
         Path path(edge_it->U, edge_it->V);
@@ -97,15 +95,14 @@ namespace {
           }
         }
       }
-       errs() << "checkpoint";
+      errs() << "checkpoint2";
       //Now it's time to find shortest path from all points to every other point.
       Function::iterator i = F.begin(), e1 = F.end();
       Function::iterator j = F.begin(), e2 = F.end();
       Function::iterator k = F.begin(), e3 = F.end();
-      errs() << "Let's find shortest paths guys\n";
-      for (; k != e3; ++k) {
-        for (; i != e1; ++i) {
-          for (; j != e2; ++j) {
+      for (; k != e3; k++) {
+        for (; i != e1; i++) {
+          for (; j != e2; j++) {
             Path IJ(i, j);
             Path JK(j, k);
             Path IK(i, k);
@@ -128,6 +125,7 @@ namespace {
           }
         }
       }
+      errs() << "checkpoint3\n";
       //Now loop detection time
       int numLoops = 0;
       for (Function::iterator BB1 = F.begin(); BB1 != F.end(); BB1++) {
@@ -143,9 +141,7 @@ namespace {
               from_path = *path;
             }
           }
-          if (to_path->dist < std::numeric_limits<int>::max() || from_path->dist < std::numeric_limits<int>::max()) {
-            numLoops++;
-          }
+          errs() << "My blockss: " << BB1->getName() << ", " << BB2->getName() << "\n";
         }
       }
       errs() << '\t' << "Num of Loops with Warshall's Alg: " << numLoops << '\n';

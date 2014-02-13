@@ -3,6 +3,7 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
+#include <limits>
 /*
  * This file runs a pass that detects the number of basic blocks in the system.
  */
@@ -15,9 +16,19 @@ namespace {
 
     virtual bool runOnModule(Module &M) {
       Module::iterator F = M.begin(), E = M.end();
+      int min = std::numeric_limits<int>::max();
+      int max = 0;
+      int total = 0;
       for (; F != E; F++) {
-        getLoopInfo(F);
+        int numBlocks = F->size();
+        total += numBlocks;
+        if (max < numBlocks) { max = numBlocks; }
+        if (min > numBlocks) { min = numBlocks; }
       } 
+      double average = total / M.size();
+      errs() << "Min Blocks in function: " << min << '\n';
+      errs() << "Max Blocks in function: " << max << '\n';
+      errs() << "Average Blocks per Function: " << average << '\n';
       return false;
     }
 
